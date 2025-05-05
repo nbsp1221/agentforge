@@ -1,8 +1,11 @@
 {
   "cSpell.words": [
+    "berriai",
     "healthcheck",
     "initdb",
     "isready",
-    "postgresdb"
+    "litellm",
+    "postgresdb",
+    "psql"
   ]
 }
