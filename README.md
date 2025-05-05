@@ -103,6 +103,8 @@ The following important environment variables can be configured in your `.env` f
 - `LITELLM_POSTGRES_PASSWORD`: Database password for LiteLLM
 - `LITELLM_MASTER_KEY`: Master key for LiteLLM admin access
 - `LITELLM_SALT_KEY`: Salt key for credential encryption
+- `LITELLM_UI_USERNAME`: Username for LiteLLM admin UI access
+- `LITELLM_UI_PASSWORD`: Password for LiteLLM admin UI access
 
 ## Important Notes
 
@@ -111,5 +113,6 @@ The following important environment variables can be configured in your `.env` f
 - All data is stored in Docker volumes for persistence.
 - You can place files you want to access from n8n in the `./files` directory, which is mounted to `/files` in the n8n container.
 - LiteLLM configuration is stored in `litellm-config.yaml`.
+- LiteLLM admin UI is accessible at `http://localhost:4000/ui` using the credentials set in the environment variables.
 - This setup uses an external `caddy-network` which should be created before running the containers.
 - For security in production environments, be sure to set strong passwords and keys.
