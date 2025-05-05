@@ -1,0 +1,30 @@
+# Environment variables
+.env
+
+# Local files directory
+/files/
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Backup files
+*.bak
+*.backup
+*~
