@@ -8,6 +8,7 @@ This setup combines:
 - **n8n**: Powerful workflow automation platform for building agent logic
 - **LiteLLM**: Proxy server for standardized access to various LLM providers
 - **PostgreSQL**: Database backend for both services
+- **Ollama**: Local LLM server for running models on your own infrastructure
 
 Perfect for creating automated AI agents that can process data, make decisions, and interact with various services and APIs.
 
@@ -56,6 +57,44 @@ docker compose up -d
 5. Access services through your browser:
    - n8n: `http://localhost:5678`
    - LiteLLM API: `http://localhost:4000`
+   - Ollama API: `http://localhost:11434`
+
+## Using Ollama
+
+### Installing Models
+
+Once the Ollama service is running, you can install and run models using the Ollama API. To install a model, run:
+
+```bash
+# Install a model (e.g., llama3)
+curl -X POST http://localhost:11434/api/pull -d '{"name": "llama3"}'
+```
+
+Or using docker exec:
+
+```bash
+docker exec -it ollama ollama pull llama3
+```
+
+### Running Models
+
+To run a model in interactive mode:
+
+```bash
+docker exec -it ollama ollama run llama3
+```
+
+### Connecting Ollama to LiteLLM
+
+You can connect Ollama to LiteLLM through the LiteLLM UI:
+
+1. Access the LiteLLM UI at `http://localhost:4000/ui`
+2. Log in with your credentials
+3. Navigate to Models/Providers section
+4. Add Ollama as a provider using the internal URL: `http://ollama:11434`
+5. Set up model routing configurations as needed
+
+This allows you to access Ollama models through the standardized LiteLLM API interface.
 
 ## Stopping the Service
 
@@ -116,3 +155,4 @@ The following important environment variables can be configured in your `.env` f
 - LiteLLM admin UI is accessible at `http://localhost:4000/ui` using the credentials set in the environment variables.
 - This setup uses an external `caddy-network` which should be created before running the containers.
 - For security in production environments, be sure to set strong passwords and keys.
+- Ollama models are stored in the `ollama-data` volume for persistence.

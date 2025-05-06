@@ -5,6 +5,7 @@
     "initdb",
     "isready",
     "litellm",
+    "ollama",
     "postgresdb",
     "psql"
   ]
