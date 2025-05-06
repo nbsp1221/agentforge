@@ -6,7 +6,9 @@
     "isready",
     "litellm",
     "ollama",
+    "openwebui",
     "postgresdb",
-    "psql"
+    "psql",
+    "webui"
   ]
 }

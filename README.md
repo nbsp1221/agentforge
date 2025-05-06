@@ -9,6 +9,7 @@ This setup combines:
 - **LiteLLM**: Proxy server for standardized access to various LLM providers
 - **PostgreSQL**: Database backend for both services
 - **Ollama**: Local LLM server for running models on your own infrastructure
+- **Open WebUI**: Web interface for interacting with Ollama models through a user-friendly chat UI
 
 Perfect for creating automated AI agents that can process data, make decisions, and interact with various services and APIs.
 
@@ -58,6 +59,7 @@ docker compose up -d
    - n8n: `http://localhost:5678`
    - LiteLLM API: `http://localhost:4000`
    - Ollama API: `http://localhost:11434`
+   - Open WebUI: `http://localhost:8080`
 
 ## Using Ollama
 
@@ -95,6 +97,52 @@ You can connect Ollama to LiteLLM through the LiteLLM UI:
 5. Set up model routing configurations as needed
 
 This allows you to access Ollama models through the standardized LiteLLM API interface.
+
+## Using Open WebUI
+
+Open WebUI provides a user-friendly interface for interacting with your Ollama models through a modern chat interface.
+
+### Getting Started with Open WebUI
+
+1. Make sure Ollama is running and has at least one model installed
+2. Access Open WebUI at `http://localhost:8080`
+3. Create an account or log in
+4. Start chatting with your local Ollama models
+
+### Key Features
+
+- **Chat Interface**: Intuitive chat interface similar to popular AI assistants
+- **Model Selection**: Switch between different Ollama models
+- **Secure Authentication**: User accounts with authentication
+- **Chat History**: Persistent chat history stored in the open-webui-data volume
+- **File Uploads**: Upload files for the AI to analyze (depending on model capabilities)
+- **Customization**: Adjust various settings to tailor your experience
+
+### Authentication
+
+- The first user to register will automatically become an admin
+- Admin users can manage user accounts and system settings
+- The `WEBUI_SECRET_KEY` environment variable is used for securing authentication
+- For production use, ensure you set a strong random key for `WEBUI_SECRET_KEY`
+
+### API Access
+
+Open WebUI provides API access for integration with other applications:
+
+1. Navigate to your account settings in the Open WebUI interface
+2. Generate an API key and/or JWT token
+3. Use these credentials to authenticate with the Open WebUI API
+
+### Security Considerations
+
+When deploying Open WebUI in a production environment, consider these security practices:
+
+- **Generate a Strong Secret Key**: Use a cryptographically secure random generator to create a `WEBUI_SECRET_KEY` with at least 64 characters
+- **Enable HTTPS**: For production deployments, configure your reverse proxy (e.g., Caddy) to use HTTPS
+- **Cookie Security**: When using HTTPS, make sure `WEBUI_SESSION_COOKIE_SECURE` and `WEBUI_AUTH_COOKIE_SECURE` are set to `True`
+- **User Management**: Review and approve new user registrations, especially when setting `DEFAULT_USER_ROLE=pending`
+- **API Access Control**: Be cautious when sharing API keys and always use the shortest viable token expiration time
+- **Regular Updates**: Keep your Open WebUI instance updated to the latest version to benefit from security patches
 
 ## Stopping the Service
 
@@ -145,6 +193,9 @@ The following important environment variables can be configured in your `.env` f
 - `LITELLM_UI_USERNAME`: Username for LiteLLM admin UI access
 - `LITELLM_UI_PASSWORD`: Password for LiteLLM admin UI access
 
+### Open WebUI Configuration
+- `WEBUI_SECRET_KEY`: Secret key for JWT token generation and authentication (at least 64 characters recommended for security)
+
 ## Important Notes
 
 - The `init-db.sh` script automatically creates databases for n8n and LiteLLM based on the environment variables.
@@ -153,6 +204,8 @@ The following important environment variables can be configured in your `.env` f
 - You can place files you want to access from n8n in the `./files` directory, which is mounted to `/files` in the n8n container.
 - LiteLLM configuration is stored in `litellm-config.yaml`.
 - LiteLLM admin UI is accessible at `http://localhost:4000/ui` using the credentials set in the environment variables.
+- Open WebUI provides a user-friendly interface for interacting with your Ollama models through a modern chat interface.
 - This setup uses an external `caddy-network` which should be created before running the containers.
 - For security in production environments, be sure to set strong passwords and keys.
 - Ollama models are stored in the `ollama-data` volume for persistence.
+- Open WebUI data (chats, settings) is stored in the `open-webui-data` volume for persistence.

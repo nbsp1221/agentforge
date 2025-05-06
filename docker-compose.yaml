@@ -1,28 +1,4 @@
 services:
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    restart: always
-    expose:
-      - 11434
-    volumes:
-      - ollama-data:/root/.ollama
-    networks:
-      - caddy-network
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    healthcheck:
-      test: ["CMD", "ollama", "--version"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
   postgres:
     image: postgres:17
     container_name: postgres
@@ -47,6 +23,53 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: always
+    expose:
+      - 11434
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - caddy-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "--version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: always
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY}
+    expose:
+      - 8080
+    volumes:
+      - open-webui-data:/app/backend/data
+    networks:
+      - caddy-network
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   n8n:
     image: docker.n8n.io/n8nio/n8n
@@ -116,6 +139,7 @@ networks:
     external: true
 
 volumes:
-  ollama-data:
   postgres-data:
+  ollama-data:
+  open-webui-data:
   n8n-data:
