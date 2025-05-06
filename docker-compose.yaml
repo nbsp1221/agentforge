@@ -41,6 +41,7 @@ services:
       - N8N_HOST=${N8N_HOST:-localhost}
       - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678}
       - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-UTC}
+      - QUEUE_HEALTH_CHECK_ACTIVE=true
     expose:
       - 5678
     volumes:
@@ -51,6 +52,12 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://127.0.0.1:5678/healthz", "-q"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   litellm:
     image: ghcr.io/berriai/litellm-database:main-latest
@@ -72,6 +79,12 @@ services:
       postgres:
         condition: service_healthy
     command: ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "8"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:4000/health/readiness"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 networks:
   caddy-network:
