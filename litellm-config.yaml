@@ -10,3 +10,4 @@ litellm_settings:
   set_verbose: false
   cache: false
   add_user_id: true
+  drop_params: true
