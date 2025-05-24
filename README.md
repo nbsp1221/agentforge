@@ -1,32 +1,43 @@
-# AI Agents
+# AgentForge
 
-A framework for building and deploying AI agents using n8n workflow automation and LiteLLM for standardized LLM access.
+🤖 **A comprehensive framework for building and deploying AI agents**
 
-## Overview
+AgentForge combines powerful workflow automation with standardized LLM access to create a complete environment for developing intelligent agents that can process data, make decisions, and interact with various services and APIs.
 
-This setup combines:
-- **n8n**: Powerful workflow automation platform for building agent logic
-- **LiteLLM**: Proxy server for standardized access to various LLM providers
-- **PostgreSQL**: Database backend for both services
-- **Ollama**: Local LLM server for running models on your own infrastructure
-- **Open WebUI**: Web interface for interacting with Ollama models through a user-friendly chat UI
+## 🚀 What is AgentForge?
 
-Perfect for creating automated AI agents that can process data, make decisions, and interact with various services and APIs.
+AgentForge is an all-in-one platform that brings together the best tools for AI agent development:
 
-## Prerequisites
+## 🏗️ Architecture Overview
+
+This platform integrates five powerful components:
+
+- **🔄 n8n**: Powerful workflow automation platform for building complex agent logic and decision trees
+- **🌐 LiteLLM**: Proxy server providing standardized access to 100+ LLM providers (OpenAI, Anthropic, Cohere, etc.)
+- **🗄️ PostgreSQL**: Robust database backend for persistent data storage across all services
+- **🧠 Ollama**: Local LLM server for running open-source models on your own infrastructure
+- **💬 Open WebUI**: Modern, intuitive web interface for interacting with your AI models
+
+**Perfect for:** Creating sophisticated AI agents that can automate workflows, process complex data, integrate with APIs, and provide intelligent responses through multiple interfaces.
+
+## 📋 Prerequisites
 
 - Docker
 - Docker Compose
 
-## Setup Instructions
+## 🚀 Quick Start
 
-1. Create a directory for files that will be accessible by n8n:
+### 1. 📁 Prepare Your Environment
+
+Create a directory for files that will be accessible by n8n:
 
 ```bash
 mkdir -p files
 ```
 
-2. Copy the example environment file and configure it:
+### 2. ⚙️ Configure Environment Variables
+
+Copy the example environment file and configure it:
 
 ```bash
 cp .env.example .env
@@ -34,7 +45,7 @@ cp .env.example .env
 
 Edit the `.env` file to set your database credentials, LiteLLM keys, and other configuration options.
 
-For generating secure passwords and keys, you can use:
+💡 **Pro Tip:** Generate secure passwords and keys:
 ```bash
 # For database passwords
 openssl rand -base64 32
@@ -43,25 +54,32 @@ openssl rand -base64 32
 openssl rand -hex 32
 ```
 
-3. Create an external network for Caddy:
+### 3. 🌐 Setup Network
+
+Create an external network for Caddy (if you plan to use reverse proxy):
 
 ```bash
 docker network create caddy-network
 ```
 
-4. Start the containers:
+### 4. 🚀 Launch AgentForge
+
+Start all services:
 
 ```bash
 docker compose up -d
 ```
 
-5. Access services through your browser:
-   - n8n: `http://localhost:5678`
-   - LiteLLM API: `http://localhost:4000`
-   - Ollama API: `http://localhost:11434`
-   - Open WebUI: `http://localhost:8080`
+### 5. 🎯 Access Your Services
 
-## Using Ollama
+Once everything is running, access your AgentForge platform:
+
+- **🔄 n8n Workflow Builder**: `http://localhost:5678`
+- **🌐 LiteLLM API Dashboard**: `http://localhost:4000`
+- **🧠 Ollama API**: `http://localhost:11434`
+- **💬 Open WebUI Chat Interface**: `http://localhost:8080`
+
+## 🧠 Using Ollama
 
 ### Installing Models
 
@@ -98,7 +116,7 @@ You can connect Ollama to LiteLLM through the LiteLLM UI:
 
 This allows you to access Ollama models through the standardized LiteLLM API interface.
 
-## Using Open WebUI
+## 💬 Using Open WebUI
 
 Open WebUI provides a user-friendly interface for interacting with your Ollama models through a modern chat interface.
 
@@ -144,7 +162,9 @@ When deploying Open WebUI in a production environment, consider these security p
 - **API Access Control**: Be cautious when sharing API keys and always use the shortest viable token expiration time
 - **Regular Updates**: Keep your Open WebUI instance updated to the latest version to benefit from security patches
 
-## Stopping the Service
+## 🛠️ Management Commands
+
+### Stopping the Service
 
 To stop the containers:
 
@@ -152,7 +172,7 @@ To stop the containers:
 docker compose down
 ```
 
-## Upgrading Services
+### Upgrading Services
 
 To upgrade to the latest versions:
 
@@ -167,7 +187,7 @@ docker compose down
 docker compose up -d
 ```
 
-## Environment Variables
+## ⚙️ Environment Variables
 
 The following important environment variables can be configured in your `.env` file:
 
@@ -196,16 +216,32 @@ The following important environment variables can be configured in your `.env` f
 ### Open WebUI Configuration
 - `WEBUI_SECRET_KEY`: Secret key for JWT token generation and authentication (at least 64 characters recommended for security)
 
-## Important Notes
+## 📝 Important Notes
 
-- The `init-db.sh` script automatically creates databases for n8n and LiteLLM based on the environment variables.
-- The databases are populated using the values from `N8N_POSTGRES_DB` and `LITELLM_POSTGRES_DB` environment variables.
-- All data is stored in Docker volumes for persistence.
-- You can place files you want to access from n8n in the `./files` directory, which is mounted to `/files` in the n8n container.
-- LiteLLM configuration is stored in `litellm-config.yaml`.
-- LiteLLM admin UI is accessible at `http://localhost:4000/ui` using the credentials set in the environment variables.
-- Open WebUI provides a user-friendly interface for interacting with your Ollama models through a modern chat interface.
-- This setup uses an external `caddy-network` which should be created before running the containers.
-- For security in production environments, be sure to set strong passwords and keys.
-- Ollama models are stored in the `ollama-data` volume for persistence.
-- Open WebUI data (chats, settings) is stored in the `open-webui-data` volume for persistence.
+- The `init-db.sh` script automatically creates databases for n8n and LiteLLM based on the environment variables
+- The databases are populated using the values from `N8N_POSTGRES_DB` and `LITELLM_POSTGRES_DB` environment variables
+- All data is stored in Docker volumes for persistence
+- You can place files you want to access from n8n in the `./files` directory, which is mounted to `/files` in the n8n container
+- LiteLLM configuration is stored in `litellm-config.yaml`
+- LiteLLM admin UI is accessible at `http://localhost:4000/ui` using the credentials set in the environment variables
+- Open WebUI provides a user-friendly interface for interacting with your Ollama models through a modern chat interface
+- This setup uses an external `caddy-network` which should be created before running the containers
+- For security in production environments, be sure to set strong passwords and keys
+- Ollama models are stored in the `ollama-data` volume for persistence
+- Open WebUI data (chats, settings) is stored in the `open-webui-data` volume for persistence
+
+## 🔗 Resources
+
+- **GitHub Repository**: [https://github.com/nbsp1221/agentforge](https://github.com/nbsp1221/agentforge)
+- **n8n Documentation**: [https://docs.n8n.io/](https://docs.n8n.io/)
+- **LiteLLM Documentation**: [https://docs.litellm.ai/](https://docs.litellm.ai/)
+- **Ollama Documentation**: [https://ollama.ai/](https://ollama.ai/)
+- **Open WebUI Documentation**: [https://docs.openwebui.com/](https://docs.openwebui.com/)
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+**AgentForge** - 🤖 *Forge your AI agents with confidence*
